@@ -6,107 +6,42 @@ spring:
     name: Gateway_Application_Team9
   cloud:
     gateway:
-      default-filters:
-        - name: RequestRateLimiter
-          args:
-            redis-rate-limiter.replenishRate: 10   # 每秒允许的请求数量
-            redis-rate-limiter.burstCapacity: 20   # 允许的突发请求数量
-            key-resolver: "#{@remoteAddrKeyResolver}"  # 基于客户端IP的限流
       routes:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/user/**
+            - Path=/api/user/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: user-service-cb
-                fallbackUri: forward:/fallback/user
 
         - id: admin-service
           uri: lb://admin-service
           predicates:
-            - Path=/admin/**
+            - Path=/api/admin/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: admin-service-cb
-                fallbackUri: forward:/fallback/admin
 
         - id: recipe-service
           uri: lb://recipe-service
           predicates:
-            - Path=/recipe/**
+            - Path=/api/recipe/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: recipe-service-cb
-                fallbackUri: forward:/fallback/recipe
 
         - id: email-service
-          uri: lb://email-service
+          uri: http://localhost:8081
           predicates:
-            - Path=/email/**
+            - Path=/api/email/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: email-service-cb
-                fallbackUri: forward:/fallback/email
-
-        - id: csv-service
-          uri: lb://csv-service
-          predicates:
-            - Path=/csv/**
-          filters:
-            - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: csv-service-cb
-                fallbackUri: forward:/fallback/csv
 
         - id: report-service
           uri: lb://report-service
           predicates:
-            - Path=/report/**
+            - Path=/api/report/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: report-service-cb
-                fallbackUri: forward:/fallback/report
-
-      redis-rate-limiter:
-        enabled: true
-
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-            allowedHeaders: "*"
-            allowCredentials: true
-    discovery:
-      locator:
-        enabled: true   # 启用服务发现路由
-        lower-case-service-id: true
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/  # Eureka 服务注册中心地址
-  instance:
-    preferIpAddress: true  # 使用IP注册
 
 logging:
   level:
-    root: INFO
     org.springframework.cloud.gateway: DEBUG  # 启用网关的调试日志
