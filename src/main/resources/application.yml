@@ -1,6 +1,7 @@
 server:
   port: 8080
-
+jwt:
+  secret: bXlTdXBlclNlY3JldEtleUFib3ZlMzJDaGFyYWN0ZXJzQW5kTG9uZw==
 spring:
   application:
     name: Gateway_Application_Team9
