@@ -7,6 +7,13 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=1
+
         - id: user-service
           uri: lb://user-service
           predicates:
@@ -35,10 +42,11 @@ spring:
           filters:
             - StripPrefix=1
 
-        - id: report-service
-          uri: lb://report-service
+        - id: report-review-service
+          uri: lb://report-review-service
           predicates:
             - Path=/api/report/**
+            - Path=/api/review/**
           filters:
             - StripPrefix=1
 
