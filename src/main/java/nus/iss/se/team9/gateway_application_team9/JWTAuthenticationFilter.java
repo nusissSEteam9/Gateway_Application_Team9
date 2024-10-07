@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -31,8 +32,9 @@ public class JWTAuthenticationFilter implements WebFilter {
             String username = getUsernameFromToken(token);
             Authentication auth = new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
             SecurityContext securityContext = new SecurityContextImpl(auth);
-            exchange.getAttributes().put("SPRING_SECURITY_CONTEXT", securityContext);
-            System.out.println("Authentication set for user: " + username);
+            // 设置 SecurityContext 到 ReactiveSecurityContextHolder 中
+            return chain.filter(exchange)
+                    .contextWrite(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)));
         }
         return chain.filter(exchange);
     }
@@ -56,7 +58,6 @@ public class JWTAuthenticationFilter implements WebFilter {
     }
 
     private String getUsernameFromToken(String token) {
-        System.out.println(token);
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 }
