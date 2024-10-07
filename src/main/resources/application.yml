@@ -1,5 +1,6 @@
 server:
   port: 8080
+
 jwt:
   secret: bXlTdXBlclNlY3JldEtleUFib3ZlMzJDaGFyYWN0ZXJzQW5kTG9uZw==
 spring:
@@ -9,7 +10,7 @@ spring:
     gateway:
       routes:
         - id: auth-service
-          uri: lb://auth-service
+          uri: http://localhost:8083
           predicates:
             - Path=/api/auth/**
           filters:
@@ -30,7 +31,7 @@ spring:
             - StripPrefix=1
 
         - id: recipe-service
-          uri: lb://recipe-service
+          uri: http://localhost:8082
           predicates:
             - Path=/api/recipe/**
           filters:
@@ -51,6 +52,3 @@ spring:
           filters:
             - StripPrefix=1
 
-logging:
-  level:
-    org.springframework.cloud.gateway: DEBUG  # 启用网关的调试日志
