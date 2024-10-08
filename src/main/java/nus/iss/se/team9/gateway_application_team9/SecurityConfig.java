@@ -18,7 +18,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
         http
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/api/auth/login").permitAll()
+                        .pathMatchers("/api/auth/**").permitAll()
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHORIZATION)
