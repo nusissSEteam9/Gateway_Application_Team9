@@ -8,7 +8,11 @@ pipeline {
         IMAGE_TAG = "${env.BUILD_ID}"            // 每次构建时的镜像标签
         DOCKER_IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}"
     }
-
+    stage('Build Jar') {
+        steps {
+            sh './gradlew clean build'
+        }
+    }
     stages {
         stage('Checkout Code') {
             steps {
