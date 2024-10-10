@@ -9,7 +9,6 @@ pipeline {
         DOCKER_IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}"
     }
 
-
     stages {
         stage('Checkout Code') {
             steps {
