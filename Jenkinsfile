@@ -13,7 +13,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // 从GitHub拉取代码
-                git url: 'https://github.com/nusissSEteam9/Gateway_Application_Team9.git', branch: 'qybl'
+                git url: 'git@github.com:nusissSEteam9/Gateway_Application_Team9.git', branch: 'qybl'
             }
         }
 
