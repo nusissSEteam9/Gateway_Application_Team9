@@ -1,6 +1,6 @@
 # 使用 Gradle 的基础镜像带有 JDK 支持
 FROM openjdk:17-jdk
-
+RUN apt-get update && apt-get install -y findutils
 # 设置工作目录
 WORKDIR /app
 
