@@ -1,5 +1,7 @@
-# 使用 Gradle 的基础镜像带有 JDK 支持
-FROM openjdk:17-jdk
+# 使用基于 debian 的 OpenJDK 镜像
+FROM openjdk:17-jdk-slim
+
+# 更新并安装必要的工具（包括 xargs）
 RUN apt-get update && apt-get install -y findutils
 # 设置工作目录
 WORKDIR /app
