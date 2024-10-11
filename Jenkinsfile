@@ -20,8 +20,8 @@ pipeline {
         stage('Build Jar in Docker') {
             steps {
                 script {
-                    // 使用自定义Docker镜像进行构建
-                    sh 'docker run --rm -v $PWD:/app -w /app custom-gradle:8.10.1-jdk17 gradle clean build'
+                    // 使用Docker镜像进行构建
+                    sh 'docker run --rm -v $PWD:/app -w /app gradle:8.10.1-jdk17 gradle clean build'
                 }
             }
         }
