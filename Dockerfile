@@ -1,14 +1,21 @@
-# 使用JDK 21的基础镜像
-FROM eclipse-temurin:21-jdk
+# 使用JDK 17的基础镜像
+FROM openjdk:17-jdk
 
-# 设置工作目录为/app
+# 安装Gradle 8.10.1
+ENV GRADLE_VERSION 8.10.1
+RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -P /tmp \
+    && unzip /tmp/gradle-${GRADLE_VERSION}-bin.zip -d /opt \
+    && rm /tmp/gradle-${GRADLE_VERSION}-bin.zip
+
+# 设置Gradle的环境变量
+ENV GRADLE_HOME /opt/gradle-${GRADLE_VERSION}
+ENV PATH $PATH:$GRADLE_HOME/bin
+
+# 设置工作目录
 WORKDIR /app
 
-# 将构建好的JAR文件复制到容器中
-COPY build/libs/Gateway_Application_Team9-0.0.1-SNAPSHOT.jar /app/app.jar
+# 复制项目文件到容器
+COPY . .
 
-# 暴露8080端口（Spring Boot默认端口）
-EXPOSE 8081
-
-# 运行JAR文件
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# 构建命令
+ENTRYPOINT ["gradle", "clean", "build"]

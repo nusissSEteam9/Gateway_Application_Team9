@@ -2,23 +2,27 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCOUNT_ID = '381492195384'          // 替换为你的AWS账户ID
-        AWS_REGION = 'ap-southeast-1'            // 替换为你的AWS区域
-        ECR_REPO_NAME = 'health/gateway'         // ECR存储库名称
-        IMAGE_TAG = "${env.BUILD_ID}"            // 每次构建时的镜像标签
+        AWS_ACCOUNT_ID = '381492195384'
+        AWS_REGION = 'ap-southeast-1'
+        ECR_REPO_NAME = 'health/gateway'
+        IMAGE_TAG = "${env.BUILD_ID}"
         DOCKER_IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}"
     }
 
     stages {
-        stage('Build Jar') {
-            steps {
-                sh './gradlew clean build --info'
-            }
-        }
         stage('Checkout Code') {
             steps {
                 // 从GitHub拉取代码
                 git url: 'git@github.com:nusissSEteam9/Gateway_Application_Team9.git', branch: 'qybl'
+            }
+        }
+
+        stage('Build Jar in Docker') {
+            steps {
+                script {
+                    // 使用自定义Docker镜像进行构建
+                    sh 'docker run --rm -v $PWD:/app -w /app custom-gradle:8.10.1-jdk17 gradle clean build'
+                }
             }
         }
 
