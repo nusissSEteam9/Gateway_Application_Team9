@@ -1,5 +1,5 @@
 # 使用基于 debian 的 OpenJDK 镜像
-FROM openjdk:17-jdk-slim
+FROM openjdk:21-jdk-slim
 
 # 更新并安装必要的工具（包括 xargs）1
 RUN apt-get update && apt-get install -y findutils
