@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout code from GitHub  4.08
+      # Step 1: Checkout code from GitHub  4.50
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -25,30 +25,17 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
-      # Step 4: Log in to Docker Hub (or AWS ECR)
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      # Step 4: Log in to Amazon ECR
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-      # Step 5: Build Docker Image
+      # Step 5: Build Docker image
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/gateway_application_team9:${{ github.sha }} .
+        run: |
+          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPO_NAME }}:${{ github.sha }} .
 
-      # Step 6: Push Docker Image to Docker Hub (or ECR)
-      - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/gateway_application_team9:${{ github.sha }}
-
-      # Step 7: SSH into EC2 and deploy the image
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/gateway_application_team9:${{ github.sha }}
-            docker stop gateway_container || true
-            docker rm gateway_container || true
-            docker run -d -p 8081:8080 --name gateway_container ${{ secrets.DOCKER_USERNAME }}/gateway_application_team9:${{ github.sha }}
+      # Step 6: Push Docker image to Amazon ECR
+      - name: Push Docker image to ECR
+        run: |
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPO_NAME }}:${{ github.sha }}
