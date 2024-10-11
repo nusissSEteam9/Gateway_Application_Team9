@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Build Jar') {
             steps {
-                sh './gradlew clean build'
+                sh './gradlew clean build --info'
             }
         }
         stage('Checkout Code') {
