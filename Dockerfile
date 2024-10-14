@@ -1,8 +1,9 @@
-# 使用基于 debian 的 OpenJDK 镜像
-FROM arm64v8/ubuntu:latest
+# 使用支持多架构的基础镜像
+FROM ubuntu:latest
 
-# 更新并安装必要的工具（包括 xargs）1
+# 更新并安装必要的工具
 RUN apt-get update && apt-get install -y findutils
+
 # 设置工作目录
 WORKDIR /app
 
@@ -15,6 +16,7 @@ RUN chmod +x ./gradlew
 # 使用 Gradle Wrapper 构建项目
 RUN ./gradlew clean build --info --stacktrace
 
+# 暴露 8080 端口
 EXPOSE 8080
 
 # 运行应用程序
