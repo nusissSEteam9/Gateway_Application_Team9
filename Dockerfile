@@ -4,9 +4,10 @@ FROM ubuntu:latest
 # 更新并安装必要的工具，包括 OpenJDK 21 和 findutils
 RUN apt-get update && apt-get install -y findutils openjdk-21-jdk
 
-# 设置 JAVA_HOME 环境变量
-ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-ENV PATH="$JAVA_HOME/bin:$PATH"
+# 获取架构并设置 JAVA_HOME
+RUN arch=$(dpkg --print-architecture) && \
+    export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-$arch && \
+    export PATH="$JAVA_HOME/bin:$PATH"
 
 # 设置工作目录
 WORKDIR /app
