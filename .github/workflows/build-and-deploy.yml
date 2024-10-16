@@ -41,7 +41,7 @@ jobs:
       # Step 6: Build and push multi-architecture Docker image
       - name: Build and push Docker image to ECR
         run: |
-          docker buildx build 
+          docker buildx build \
             --platform linux/arm64 \
             -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPO_NAME }}:latest \
             --push .
