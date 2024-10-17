@@ -24,7 +24,7 @@ spring:
               - Authorization
       routes:
         - id: auth-service
-          uri: http://localhost:8083
+          uri: http://13.229.212.5:8080
           predicates:
             - Path=/api/auth/**
           filters:
