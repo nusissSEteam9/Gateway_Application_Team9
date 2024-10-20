@@ -45,3 +45,10 @@ spring:
             - Path=/api/admin/**
           filters:
             - StripPrefix=1
+
+        - id: recipe-service
+          uri: ${RECIPE_SERVICE_URL}  # 使用环境变量
+          predicates:
+            - Path=/api/recipe/**
+          filters:
+            - StripPrefix=1
