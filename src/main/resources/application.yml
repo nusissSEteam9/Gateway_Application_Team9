@@ -26,7 +26,7 @@ spring:
               - Authorization
       routes:
         - id: auth-service
-          uri: ${AUTH_SERVICE_URL}  # 使用环境变量
+          uri: ${AUTH_SERVICE_URL}  # 使用环境变量1
           predicates:
             - Path=/api/auth/**
           filters:
