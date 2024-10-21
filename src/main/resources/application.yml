@@ -45,3 +45,31 @@ spring:
             - Path=/api/admin/**
           filters:
             - StripPrefix=1
+
+        - id: recipe-service
+          uri: ${RECIPE_SERVICE_URL}
+          predicates:
+            - Path=/api/recipe/**
+          filters:
+            - StripPrefix=1
+
+        - id: email-service
+          uri: ${EMAIL_SERVICE_URL}
+          predicates:
+            - Path=/api/email/**
+          filters:
+            - StripPrefix=1
+
+        - id: report-service
+          uri: ${REPORT_SERVICE_URL}
+          predicates:
+            - Path=/api/report/**
+          filters:
+            - StripPrefix=1
+
+        - id: review-service
+          uri: ${REVIEW_SERVICE_URL}
+          predicates:
+            - Path=/api/review/**
+          filters:
+            - StripPrefix=1
