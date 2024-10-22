@@ -13,7 +13,8 @@ spring:
       globalcors:
         corsConfigurations:
           '/**': # Removed the square brackets
-            allowedOrigins: "*"  # 使用环境变量，默认localhost
+            allowedOrigins:
+              - "*"  
             allowedMethods:
               - GET
               - POST
