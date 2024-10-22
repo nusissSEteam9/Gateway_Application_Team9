@@ -20,6 +20,18 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          
+      # Step 2.1: (Optional) Explicitly cache Gradle dependencies if not using 'cache: gradle'
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper/
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      
 
       # Step 3: Build the JAR file using Gradle
       - name: Build with Gradle
