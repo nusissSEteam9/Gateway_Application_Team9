@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,7 +28,26 @@ public class JWTAuthenticationFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String path = exchange.getRequest().getURI().getPath();
+        String method = exchange.getRequest().getMethod().name();
+        System.out.println("Request path: " + path + ", method: " + method);
+
+        if (exchange.getRequest().getMethod() == HttpMethod.OPTIONS) {
+            return chain.filter(exchange);
+        }
+
         String token = resolveToken(exchange.getRequest());
+        if (token != null) {
+            System.out.println("Token found: " + token);
+            if (validateToken(token)) {
+                System.out.println("Token validation succeeded.");
+            } else {
+                System.out.println("Token validation failed.");
+            }
+        } else {
+            System.out.println("No token found.");
+        }
+
         if (token != null && validateToken(token)) {
             String username = getUsernameFromToken(token);
             Authentication auth = new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
