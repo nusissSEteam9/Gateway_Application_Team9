@@ -12,7 +12,7 @@ spring:
     gateway:
       globalcors:
         corsConfigurations:
-          '/**': # Removed the square brackets
+          '[/**]': # Removed the square brackets
             allowedOrigins:
               - "*"
             allowedMethods:
@@ -21,7 +21,8 @@ spring:
               - PUT
               - DELETE
               - OPTIONS
-            allowedHeaders: "*"
+            allowedHeaders: 
+              - "*"
             allowCredentials: false
             exposedHeaders:
               - Authorization
