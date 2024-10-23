@@ -3,6 +3,7 @@ package nus.iss.se.team9.gateway_application_team9;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -42,7 +43,7 @@ public class SecurityConfig {
         config.addAllowedMethod("*");  // 允许所有 HTTP 方法
         config.addAllowedHeader("*");  // 允许所有头部
         config.setAllowCredentials(false);  // 如果不需要携带 Cookie 或凭证
-
+        config.addExposedHeader(HttpHeaders.AUTHORIZATION);  // 允许暴露 Authorization 头部
         source.registerCorsConfiguration("/**", config);
         return new CorsWebFilter(source);
     }

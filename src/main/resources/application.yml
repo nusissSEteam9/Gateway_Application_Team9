@@ -10,22 +10,6 @@ spring:
 
   cloud:
     gateway:
-      globalcors:
-        corsConfigurations:
-          '[/**]': # Removed the square brackets
-            allowedOrigins:
-              - "*"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-            allowedHeaders: 
-              - "*"
-            allowCredentials: false
-            exposedHeaders:
-              - Authorization
       routes:
         - id: auth-service
           uri: ${AUTH_SERVICE_URL}  # 使用环境变量1
