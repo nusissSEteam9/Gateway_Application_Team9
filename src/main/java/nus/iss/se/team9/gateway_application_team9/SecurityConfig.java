@@ -8,7 +8,9 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfiguration;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
@@ -31,5 +33,17 @@ public class SecurityConfig {
                         })
                 );
         return http.build();
+    }
+    @Bean
+    public CorsWebFilter corsWebFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("*");  // 允许所有来源
+        config.addAllowedMethod("*");  // 允许所有 HTTP 方法
+        config.addAllowedHeader("*");  // 允许所有头部
+        config.setAllowCredentials(false);  // 如果不需要携带 Cookie 或凭证
+
+        source.registerCorsConfiguration("/**", config);
+        return new CorsWebFilter(source);
     }
 }
