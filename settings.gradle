@@ -1,1 +1,13 @@
 rootProject.name = 'Gateway_Application_Team9'
+buildCache {
+    local {
+        enabled = true
+        directory = "${rootDir}/.gradle/build-cache"
+        removeUnusedEntriesAfterDays = 30
+    }
+    // Optionally, configure a remote build cache
+    // remote(HttpBuildCache) {
+    //     url = 'https://your-remote-cache-url'
+    //     push = true
+    // }
+}
