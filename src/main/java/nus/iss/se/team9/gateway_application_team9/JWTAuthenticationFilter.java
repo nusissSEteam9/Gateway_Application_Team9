@@ -1,5 +1,6 @@
 package nus.iss.se.team9.gateway_application_team9;
 
+import java. util. *;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.Nullable;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -50,7 +52,8 @@ public class JWTAuthenticationFilter implements WebFilter {
 
         if (token != null && validateToken(token)) {
             String username = getUsernameFromToken(token);
-            Authentication auth = new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+            List<SimpleGrantedAuthority> authorities = getAuthoritiesFromToken(token);
+            Authentication auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
             SecurityContext securityContext = new SecurityContextImpl(auth);
             // 设置 SecurityContext 到 ReactiveSecurityContextHolder 中
             return chain.filter(exchange)
@@ -79,5 +82,14 @@ public class JWTAuthenticationFilter implements WebFilter {
 
     private String getUsernameFromToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    private List<SimpleGrantedAuthority> getAuthoritiesFromToken(String token) {
+        String role = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
+        return Collections.singletonList(new SimpleGrantedAuthority(role));
     }
 }
