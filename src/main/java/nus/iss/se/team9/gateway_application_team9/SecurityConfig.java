@@ -23,6 +23,7 @@ public class SecurityConfig {
         http
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .pathMatchers(HttpMethod.DELETE, "/api/recipe/**").permitAll()
                         .pathMatchers("/api/auth/**").permitAll()
                         .pathMatchers("/api/recipe/search").permitAll()
                         .pathMatchers("/api/admin/**").hasAuthority("admin")
