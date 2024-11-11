@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - master
+      - qybl
 
 jobs:
   # 构建并测试应用程序
